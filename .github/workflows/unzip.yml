@@ -1,4 +1,4 @@
-name: Unzip and Deploy
+nname: Unzip and Deploy
 on:
   push:
     branches: ["master", "main"]
@@ -13,6 +13,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Extract Website Files
         run: unzip public.zip -d ./deployed_site
+      - name: Fix CSS and Image Paths
+        run: |
+          # This replaces relative root links with your repository folder path layout
+          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|href="/|href="/sabayon-website-next/|g' {} +
+          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|src="/|src="/sabayon-website-next/|g' {} +
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
