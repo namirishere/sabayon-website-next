@@ -1,0 +1,21 @@
+name: Unzip and Deploy
+on:
+  push:
+    branches: ["master", "main"]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract Website Files
+        run: unzip public.zip -d ./deployed_site
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./deployed_site/public
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
