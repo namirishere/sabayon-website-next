@@ -13,11 +13,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Extract Website Files
         run: unzip public.zip -d ./deployed_site
-      - name: Fix CSS and Image Paths
+      - name: Force Fix All Theme Paths
         run: |
-          # This replaces relative root links with your correct repository path layout
-          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|href="/|href="/sabayon-website-next/|g' {} +
-          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|src="/|src="/sabayon-website-next/|g' {} +
+          # This replaces absolute root links with your correct repository path layout
+          find ./deployed_site/public -type f \( -name "*.html" -o -name "*.css" \) -exec sed -i 's|href="/|href="/sabayon-website-next/|g' {} +
+          find ./deployed_site/public -type f \( -name "*.html" -o -name "*.css" \) -exec sed -i 's|src="/|src="/sabayon-website-next/|g' {} +
+          
+          # Fix common Hugo relative path bugs
+          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|href="css/|href="/sabayon-website-next/css/|g' {} +
+          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|src="images/|src="/sabayon-website-next/images/|g' {} +
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
