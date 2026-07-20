@@ -1,4 +1,4 @@
-name: Unzip and Deploy
+nname: Unzip and Deploy
 on:
   push:
     branches: ["master", "main"]
@@ -13,10 +13,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Extract Website Files
         run: unzip public.zip -d ./deployed_site
-      - name: Inject Missing Theme Styles
+      - name: Fix Broken Sabayon Core Paths
         run: |
-          # This automatically injects the official Bootstrap layout framework right into the header of your pages without modifying your actual repository code files
-          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|</head>|<link rel="stylesheet" href="https://bootstrapcdn.com"></head>|g' {} +
+          # This replaces broken layout paths with your correct subfolder URL path configuration
+          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|href="/|href="/sabayon-website-next/|g' {} +
+          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|src="/|src="/sabayon-website-next/|g' {} +
+          
+          # Workaround for local template link errors
+          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|href="css/|href="/sabayon-website-next/css/|g' {} +
+          find ./deployed_site/public -type f -name "*.html" -exec sed -i 's|src="images/|src="/sabayon-website-next/images/|g' {} +
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
