@@ -1,0 +1,37 @@
+name: Deploy Website
+on:
+  push:
+    branches: ["master", "main"]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch Legacy Theme
+        run: |
+          mkdir -p themes/website-next
+          git clone https://github.com themes/website-next
+          sed -i 's/\.RSSLink/\.OutputFormats\.Get "RSS"/' themes/website-next/layouts/partials/meta.html || true
+      - name: Setup Legacy Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.55.6'
+      - name: Build
+        run: hugo -b "https://github.io"
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
