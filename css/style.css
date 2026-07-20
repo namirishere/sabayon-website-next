@@ -1,0 +1,35 @@
+body {
+  padding-top: 3.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #333;
+  background-color: #fff;
+}
+.navbar-brand {
+  font-weight: bold;
+  color: #0056b3 !important;
+}
+.jumbotron {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 4rem 2rem;
+  margin-bottom: 2rem;
+}
+.btn-dark {
+  background-color: #212529;
+  border-color: #212529;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-dark:hover {
+  background-color: #111;
+}
+footer {
+  margin-top: 4rem;
+  padding: 2rem 0;
+  border-top: 1px solid #e5e5e5;
+  color: #777;
+  text-center: center;
+}
